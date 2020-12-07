@@ -43,7 +43,7 @@ public class DrtZonalSystemParams extends ReflectiveConfigGroup {
 		super(SET_NAME);
 	}
 
-	public enum TargetLinkSelection {random, mostCentral}
+	public enum TargetLinkSelection {random, mostCentral, predetermined}
 
 	public enum ZoneGeneration {GridFromNetwork, ShapeFile}
 

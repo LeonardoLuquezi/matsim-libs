@@ -24,7 +24,13 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.math3.stat.descriptive.DescriptiveStatistics;
 import org.apache.log4j.Logger;
@@ -78,7 +84,7 @@ public final class DrtZonalWaitTimesAnalyzer implements IterationEndsListener, S
 			format.setMinimumIntegerDigits(1);
 			format.setMaximumFractionDigits(2);
 			format.setGroupingUsed(false);
-			bw.append("zone;centerX;centerY;nRequests;sumWaitTime;meanWaitTime;min;max;p95;p90;p80;p75;p50");
+			bw.append("zone;centerX;centerY;nRequests;sumWaitTime;meanWaitTime;min;max;p95;p90;p80;p75;p50;SR10min;SR15min");
 			// sorted output
 			SortedSet<String> zoneIdsAndOutside = new TreeSet<>(zones.getZones().keySet());
 			zoneIdsAndOutside.add(zoneIdForOutsideOfZonalSystem);
@@ -113,7 +119,11 @@ public final class DrtZonalWaitTimesAnalyzer implements IterationEndsListener, S
 				append(delimiter).
 				append(String.valueOf(stats.getPercentile(75))).
 				append(delimiter).
-				append(String.valueOf(stats.getPercentile(50)));
+				append(String.valueOf(stats.getPercentile(50))).
+				append(delimiter).
+				append(String.valueOf(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(stats, 600))).
+				append(delimiter).
+				append(String.valueOf(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(stats, 900)));
 			}
 			bw.flush();
 			bw.close();

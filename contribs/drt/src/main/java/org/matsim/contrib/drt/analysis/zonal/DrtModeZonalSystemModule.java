@@ -57,49 +57,50 @@ public class DrtModeZonalSystemModule extends AbstractDvrpModeModule {
 		bindModal(DrtZonalSystem.class).toProvider(modalProvider(getter -> {
 			Network network = getter.getModal(Network.class);
 			switch (params.getZonesGeneration()) {
-				case ShapeFile:
-					final List<PreparedGeometry> preparedGeometries = loadPreparedGeometries(
-							params.getZonesShapeFileURL(getConfig().getContext()));
-					return DrtZonalSystem.createFromPreparedGeometries(network,
-							EntryStream.of(preparedGeometries).mapKeys(i -> (i + 1) + "").toMap());
+			case ShapeFile:
+				final List<PreparedGeometry> preparedGeometries = loadPreparedGeometries(
+						params.getZonesShapeFileURL(getConfig().getContext()));
+				return DrtZonalSystem.createFromPreparedGeometries(network,
+						EntryStream.of(preparedGeometries).mapKeys(i -> (i + 1) + "").toMap());
 
-				case GridFromNetwork:
-					Preconditions.checkNotNull(params.getCellSize());
-					var gridZones = drtCfg.getOperationalScheme() == OperationalScheme.serviceAreaBased ?
-							createGridFromNetworkWithinServiceArea(network, params.getCellSize(),
-									loadPreparedGeometries(
-											drtCfg.getDrtServiceAreaShapeFileURL(getConfig().getContext()))) :
-							createGridFromNetwork(network, params.getCellSize());
-					return DrtZonalSystem.createFromPreparedGeometries(network, gridZones);
+			case GridFromNetwork:
+				Preconditions.checkNotNull(params.getCellSize());
+				var gridZones = drtCfg.getOperationalScheme() == OperationalScheme.serviceAreaBased
+						? createGridFromNetworkWithinServiceArea(network, params.getCellSize(),
+								loadPreparedGeometries(drtCfg.getDrtServiceAreaShapeFileURL(getConfig().getContext())))
+						: createGridFromNetwork(network, params.getCellSize());
+				return DrtZonalSystem.createFromPreparedGeometries(network, gridZones);
 
-				default:
-					throw new RuntimeException("Unsupported zone generation");
+			default:
+				throw new RuntimeException("Unsupported zone generation");
 			}
 		})).asEagerSingleton();
 
 		bindModal(DrtZoneTargetLinkSelector.class).toProvider(modalProvider(getter -> {
 			switch (params.getTargetLinkSelection()) {
-				case mostCentral:
-					return new MostCentralDrtZoneTargetLinkSelector(getter.getModal(DrtZonalSystem.class));
-				case random:
-					return new RandomDrtZoneTargetLinkSelector();
-				default:
-					throw new RuntimeException(
-							"Unsupported target link selection = " + params.getTargetLinkSelection());
+			case mostCentral:
+				return new MostCentralDrtZoneTargetLinkSelector(getter.getModal(DrtZonalSystem.class));
+			case random:
+				return new RandomDrtZoneTargetLinkSelector();
+			case predetermined:
+				return new PredeterminedPointTargetLinkSelector(getter.getModal(DrtZonalSystem.class), null);
+			default:
+				throw new RuntimeException("Unsupported target link selection = " + params.getTargetLinkSelection());
 			}
 		})).asEagerSingleton();
 
-		//zonal analysis
-		bindModal(ZonalIdleVehicleXYVisualiser.class).
-				toProvider(modalProvider(
-						getter -> new ZonalIdleVehicleXYVisualiser(getter.get(MatsimServices.class), drtCfg.getMode(),
-								getter.getModal(DrtZonalSystem.class)))).asEagerSingleton();
+		// zonal analysis
+		bindModal(ZonalIdleVehicleXYVisualiser.class)
+				.toProvider(modalProvider(getter -> new ZonalIdleVehicleXYVisualiser(getter.get(MatsimServices.class),
+						drtCfg.getMode(), getter.getModal(DrtZonalSystem.class))))
+				.asEagerSingleton();
 		addControlerListenerBinding().to(modalKey(ZonalIdleVehicleXYVisualiser.class));
 		addEventHandlerBinding().to(modalKey(ZonalIdleVehicleXYVisualiser.class));
 
-		bindModal(DrtZonalWaitTimesAnalyzer.class).toProvider(modalProvider(
-				getter -> new DrtZonalWaitTimesAnalyzer(drtCfg, getter.getModal(DrtRequestAnalyzer.class),
-						getter.getModal(DrtZonalSystem.class)))).asEagerSingleton();
+		bindModal(DrtZonalWaitTimesAnalyzer.class)
+				.toProvider(modalProvider(getter -> new DrtZonalWaitTimesAnalyzer(drtCfg,
+						getter.getModal(DrtRequestAnalyzer.class), getter.getModal(DrtZonalSystem.class))))
+				.asEagerSingleton();
 		addControlerListenerBinding().to(modalKey(DrtZonalWaitTimesAnalyzer.class));
 	}
 }

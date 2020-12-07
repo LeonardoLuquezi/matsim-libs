@@ -57,7 +57,7 @@ public final class FeedforwardRebalancingStrategyParams extends ReflectiveConfig
 	@Positive
 	private int timeBinSize = 900; // [s]
 
-	@Positive
+	@Nonnegative
 	private double feedforwardSignalStrength = 1;
 
 	@Nonnegative
