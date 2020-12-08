@@ -35,7 +35,6 @@ import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.network.Link;
 import org.matsim.api.core.v01.network.Network;
-import org.matsim.contrib.drt.analysis.zonal.DrtSatisfactionRateAnalysisUtils;
 import org.matsim.contrib.drt.run.DrtConfigGroup;
 import org.matsim.contrib.dvrp.fleet.DvrpVehicleSpecification;
 import org.matsim.contrib.dvrp.fleet.FleetSpecification;
@@ -152,8 +151,6 @@ public class DrtTripsAnalyser {
 				format.format(waitStats.getPercentile(95)) + "",//
 				format.format(waitStats.getPercentile(75)) + "",//
 				format.format(waitStats.getPercentile(50)) + "",//
-				format.format(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(waitStats, 600)) + "",//
-				format.format(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(waitStats, 900)) + "",//
 				format.format(rideStats.getMean()) + "",//
 				format.format(distanceStats.getMean()) + "",//
 				format.format(directDistanceStats.getMean()) + "",//

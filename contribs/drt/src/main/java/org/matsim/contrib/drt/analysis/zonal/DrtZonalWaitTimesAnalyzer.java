@@ -119,11 +119,7 @@ public final class DrtZonalWaitTimesAnalyzer implements IterationEndsListener, S
 				append(delimiter).
 				append(String.valueOf(stats.getPercentile(75))).
 				append(delimiter).
-				append(String.valueOf(stats.getPercentile(50))).
-				append(delimiter).
-				append(String.valueOf(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(stats, 600))).
-				append(delimiter).
-				append(String.valueOf(DrtSatisfactionRateAnalysisUtils.getSatisfactionRate(stats, 900)));
+				append(String.valueOf(stats.getPercentile(50)));
 			}
 			bw.flush();
 			bw.close();
