@@ -84,7 +84,7 @@ public final class DrtZonalWaitTimesAnalyzer implements IterationEndsListener, S
 			format.setMinimumIntegerDigits(1);
 			format.setMaximumFractionDigits(2);
 			format.setGroupingUsed(false);
-			bw.append("zone;centerX;centerY;nRequests;sumWaitTime;meanWaitTime;min;max;p95;p90;p80;p75;p50;SR10min;SR15min");
+			bw.append("zone;centerX;centerY;nRequests;sumWaitTime;meanWaitTime;min;max;p95;p90;p80;p75;p50");
 			// sorted output
 			SortedSet<String> zoneIdsAndOutside = new TreeSet<>(zones.getZones().keySet());
 			zoneIdsAndOutside.add(zoneIdForOutsideOfZonalSystem);
