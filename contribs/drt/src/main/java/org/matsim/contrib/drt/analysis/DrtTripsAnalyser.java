@@ -144,7 +144,6 @@ public class DrtTripsAnalyser {
 			directDistanceStats.addValue(trip.unsharedDistanceEstimate_m);
 			traveltimes.addValue(trip.arrivalTime - trip.departureTime);
 		}
-		
 		return String.join(delimiter, format.format(waitStats.getValues().length) + "",//
 				format.format(waitStats.getMean()) + "",//
 				format.format(waitStats.getMax()) + "",//
