@@ -22,6 +22,7 @@ package org.matsim.contrib.drt.analysis.zonal;
 
 import static org.matsim.contrib.drt.analysis.zonal.DrtGridUtils.createGridFromNetwork;
 import static org.matsim.contrib.drt.analysis.zonal.DrtGridUtils.createGridFromNetworkWithinServiceArea;
+import static org.matsim.contrib.drt.run.DrtConfigGroup.OperationalScheme;
 import static org.matsim.utils.gis.shp2matsim.ShpGeometryUtils.loadPreparedGeometries;
 
 import java.util.List;
@@ -30,7 +31,6 @@ import org.locationtech.jts.geom.prep.PreparedGeometry;
 import org.matsim.api.core.v01.network.Network;
 import org.matsim.contrib.drt.analysis.DrtRequestAnalyzer;
 import org.matsim.contrib.drt.run.DrtConfigGroup;
-import org.matsim.contrib.drt.run.DrtConfigGroup.OperationalScheme;
 import org.matsim.contrib.dvrp.run.AbstractDvrpModeModule;
 import org.matsim.core.controler.MatsimServices;
 
